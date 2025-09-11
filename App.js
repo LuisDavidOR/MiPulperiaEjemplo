@@ -6,9 +6,9 @@ import { collection, getDocs } from 'firebase/firestore';
 export default function App() {
 
   const [productos, setProductos] = useState([]);
+  const [clientes, setClientes] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchDataproductos = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "Productos"));
         const data = querySnapshot.docs.map(doc => ({
@@ -32,34 +32,65 @@ export default function App() {
         console.error("Error al obtener documentos: ", error);
       }
     };
-    fetchData();
+
+    const fetchDataclientes = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "Clientes"));
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setClientes(data);
+      } catch (error) {
+        console.error("Error al obtener documentos: ", error);
+      }
+    };
+
+  useEffect(() => {
+    fetchDataproductos();
+    fetchDataclientes();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Lista de Productos</Text>
+      <View>
+        <Text style={styles.titulo}>Lista de Productos</Text>
+        <FlatList
+          data={productos}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View>
+              <Text style={styles.item}>
+              {item.nombre} - ${item.precio}
+              </Text>
+              {item.sabores && item.sabores.length > 0 && (
+                <FlatList
+                  data={item.sabores}
+                  keyExtractor={(subItem) => subItem.id}
+                  renderItem={({ item: subItem}) => (
+                  <Text style={[styles.item, {marginLeft: 20}]}>
+                    Sabor: {subItem.sabor}
+                  </Text>
+                  )}
+                />
+              )}
+            </View>
+          )}
+        />
+      </View>
+      <Text style={styles.titulo}>Lista de Clientes</Text>
       <FlatList
-        data={productos}
+        data={clientes}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
             <Text style={styles.item}>
-             {item.nombre} - ${item.precio}
+             <Text style={styles.textbold}>Nombre: </Text>
+             {item.nombre} {item.apellido}
             </Text>
-            {item.sabores && item.sabores.length > 0 && (
-              <FlatList
-                data={item.sabores}
-                keyExtractor={(subItem) => subItem.id}
-                renderItem={({ item: subItem}) => (
-                  <Text style={[styles.item, {marginLeft: 20}]}>
-                    Sabor: {subItem.sabor}
-                  </Text>
-                )}
-              />
-            )}
-            </View>
-          )}
-        />
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -74,6 +105,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  textbold: {
+    fontWeight: "bold",
   },
   item: {
     fontSize: 18,
