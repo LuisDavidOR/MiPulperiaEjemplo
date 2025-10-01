@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { db } from '../database/firebaseconfig.js';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import ListaClientes from '../components/ListaClientes.js';
 import FormularioClientes from '../components/FormularioClientes.js';
+import TablaClientes from '../components/TablaClientes.js';
 
 const Clientes = () => {
   const [clientes, setClientes] = useState([]);
@@ -21,6 +22,15 @@ const Clientes = () => {
     }
   };
 
+  const eliminarCliente = async (id) => {
+    try{
+      await deleteDoc(doc(db, "Clientes", id));
+      cargarDatos();
+    } catch (error) {
+      console.error("Error al eliminar: ", error);
+    }
+  };
+
   useEffect(() => {
     cargarDatos();
   }, []);
@@ -29,6 +39,10 @@ const Clientes = () => {
     <View style={styles.container}>
       <FormularioClientes cargarDatos={cargarDatos}/>
       <ListaClientes clientes={clientes}/>
+      <TablaClientes
+        clientes={clientes}
+        eliminarCliente={eliminarCliente}
+      />
     </View>
   );
 };

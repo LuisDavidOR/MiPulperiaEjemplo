@@ -75,7 +75,7 @@ const FormularioClientes = ({ cargarDatos }) => {
       />
       <TextInput 
         style={styles.input}
-        placeholder="Cedula"
+        placeholder="Cédula"
         value={cedula}
         onChangeText={setCedula}
       />

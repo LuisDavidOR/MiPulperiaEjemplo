@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { db } from '../database/firebaseconfig.js';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import ListaProductos from '../components/ListaProductos.js';
 import FormularioProductos from '../components/FormularioProductos';
+import TablaProductos from '../components/TablaProductos.js';
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -21,6 +22,15 @@ const Productos = () => {
     }
   };
 
+  const eliminarProducto = async (id) => {
+    try{
+      await deleteDoc(doc(db, "Productos", id));
+      cargarDatos();
+    } catch (error) {
+      console.error("Error al eliminar: ", error);
+    }
+  };
+
   useEffect(() => {
     cargarDatos();
   }, []);
@@ -29,6 +39,10 @@ const Productos = () => {
     <View style={styles.container}>
       <FormularioProductos cargarDatos={cargarDatos}/>
       <ListaProductos productos={productos}/>
+      <TablaProductos
+        productos={productos}
+        eliminarProducto={eliminarProducto}
+      />
     </View>
   );
 };
