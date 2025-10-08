@@ -1,34 +1,28 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import BotonEliminarCliente from "./BotonEliminarCliente";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import BotonEliminarEdad from "./BotonEliminarEdad";
 
-const TablaClientes = ({ clientes, eliminarCliente, editarCliente }) => {
+const TablaEdades = ({ edades, eliminarEdad }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Tabla de Clientes</Text>
+      <Text style={styles.titulo}>Tabla de Edades</Text>
 
       {/*Encabezado de la tabla */}
       <View style={[styles.fila, styles.encabezado]}>
         <Text style={[styles.celda, styles.textoEncabezado]}>Nombre</Text>
-        <Text style={[styles.celda, styles.textoEncabezado]}>Apellido</Text>
+        <Text style={[styles.celda, styles.textoEncabezado]}>Edad</Text>
         <Text style={[styles.celda, styles.textoEncabezado]}>Acciones</Text>
       </View>
 
       {/* Contenido de la tabla */}
       <ScrollView>
-        {clientes.map((item) => (
+        {edades.map((item) => (
           <View key={item.id} style={styles.fila}>
             <Text style={styles.celda}>{item.nombre}</Text>
-            <Text style={styles.celda}>{item.apellido}</Text>
+            <Text style={styles.celda}>{item.edad}</Text>
             {/* Celda de acciones */}
             <View style={[styles.celdaAcciones]}>
-              <TouchableOpacity
-                style={styles.botonActualizar}
-                onPress={() => editarCliente(item)}
-              >
-                <Text>✏️</Text>
-              </TouchableOpacity>
-              <BotonEliminarCliente id={item.id} eliminarCliente={eliminarCliente} />
+              <BotonEliminarEdad id={item.id} eliminarEdad={eliminarEdad} />
             </View>
           </View>
         ))}
@@ -77,14 +71,6 @@ const styles= StyleSheet.create({
     fontSize: 17,
     textAlign: 'center'
   },
-  botonActualizar: {
-    padding: 4,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#f3f3f7'
-  }
 });
 
-export default TablaClientes;
+export default TablaEdades;

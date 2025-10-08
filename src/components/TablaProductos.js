@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import BotonEliminarProducto from "./BotonEliminarProducto.js";
 
-const TablaProductos = ({ productos, eliminarProducto }) => {
+const TablaProductos = ({ productos, eliminarProducto, editarProducto }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Tabla de Productos</Text>
@@ -24,6 +24,12 @@ const TablaProductos = ({ productos, eliminarProducto }) => {
             <Text style={styles.celda}>{item.stock}</Text>
             {/* Celda de acciones */}
             <View style={[styles.celdaAcciones]}>
+              <TouchableOpacity
+                style={styles.botonActualizar}
+                onPress={() => editarProducto(item)}
+              >
+                <Text>✏️</Text>
+              </TouchableOpacity>
               <BotonEliminarProducto id={item.id} eliminarProducto={eliminarProducto} />
             </View>
           </View>
@@ -71,6 +77,14 @@ const styles= StyleSheet.create({
     fontSize: 17,
     textAlign: 'center'
   },
+  botonActualizar: {
+    padding: 4,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#f3f3f7'
+  }
 });
 
 export default TablaProductos;

@@ -1,86 +1,64 @@
 import React, {useState} from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
-import { db } from "../database/firebaseconfig";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, addDoc } from "firebase/firestore";
 
-const FormularioClientes = ({ cargarDatos }) => {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [gmail, setGmail] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [edad, setEdad] = useState("");
-  const [cedula, setCedula] = useState("");
-
-  const guardarCliente = async () => {
-    if (nombre && apellido && gmail && edad && telefono && cedula) {
-      try {
-        await addDoc(collection(db, "Clientes"), {
-          nombre: nombre,
-          apellido: apellido,
-          gmail: gmail,
-          telefono: telefono,
-          edad: edad,
-          cedula: cedula,
-        });
-        setNombre("");
-        setApellido("");
-        setGmail("");
-        setEdad("");
-        setTelefono("");
-        setCedula("");
-        cargarDatos(); //Volver a cargar la lista
-      } catch (error) {
-        console.error("Error al registrar cliente: ", error);
-      }
-    } else {
-      alert("Por favor, complete todos los campos.");
-    }
-  };
+const FormularioClientes = ({
+  nuevoCliente,
+  manejoCambio,
+  guardarCliente,
+  actualizarCliente,
+  modoEdicion
+}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Registro de Clientes</Text>
+      <Text style={styles.titulo}>
+        {modoEdicion ? "Actualizar Cliente" : "Registro de Cliente"}
+      </Text>
 
       <TextInput 
         style={styles.input}
         placeholder="Nombre del cliente"
-        value={nombre}
-        onChangeText={setNombre}
+        value={nuevoCliente.nombre}
+        onChangeText={(nombre) => manejoCambio("nombre", nombre)}
       />
       <TextInput 
         style={styles.input}
         placeholder="Apellido del cliente"
-        value={apellido}
-        onChangeText={setApellido}
+        value={nuevoCliente.apellido}
+        onChangeText={(apellido) => manejoCambio("apellido", apellido)}
       />
       <TextInput 
         style={styles.input}
         placeholder="Gmail"
-        value={gmail}
-        onChangeText={setGmail}
+        value={nuevoCliente.gmail}
+        onChangeText={(gmail) => manejoCambio("gmail", gmail)}
       />
       <TextInput 
         style={styles.input}
         placeholder="Edad"
-        value={edad}
-        onChangeText={setEdad}
+        value={nuevoCliente.edad}
+        onChangeText={(edad) => manejoCambio("edad", edad)}
         keyboardType="numeric"
       />
       <TextInput 
         style={styles.input}
         placeholder="Teléfono"
-        value={telefono}
-        onChangeText={setTelefono}
+        value={nuevoCliente.telefono}
+        onChangeText={(telefono) => manejoCambio("telefono", telefono)}
         keyboardType="numeric"
       />
       <TextInput 
         style={styles.input}
         placeholder="Cédula"
-        value={cedula}
-        onChangeText={setCedula}
+        value={nuevoCliente.cedula}
+        onChangeText={(cedula) => manejoCambio("cedula", cedula)}
       />
 
-      <Button title='Guardar' onPress={guardarCliente}/>
+      <Button
+        title={modoEdicion ? "Actualizar" : "Guardar"}
+        onPress={modoEdicion ? actualizarCliente : guardarCliente}
+      />
 
     </View>
   );
