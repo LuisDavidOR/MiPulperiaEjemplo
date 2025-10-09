@@ -50,7 +50,7 @@ const Clientes = () => {
 
   const guardarCliente = async () => {
     try {
-      if (nuevoCliente.nombre && nuevoCliente.apellido && nuevoCliente.gmail
+      if (nuevoCliente.nombre && nuevoCliente.apellido && nuevoCliente.edad && nuevoCliente.gmail
           && nuevoCliente.telefono && nuevoCliente.cedula) {
         await addDoc(collection(db, "Clientes"), {
           nombre: nuevoCliente.nombre,
