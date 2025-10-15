@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button } from 'react-native';
 import { db } from '../database/firebaseconfig.js';
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from 'firebase/firestore';
 import ListaProductos from '../components/ListaProductos.js';
 import FormularioProductos from '../components/FormularioProductos';
 import TablaProductos from '../components/TablaProductos.js';
 
-const Productos = () => {
+const Productos = ( {cerrarSesion} ) => {
   const [productos, setProductos] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [productoId, setProductoId] = useState(null);
@@ -108,6 +108,7 @@ const Productos = () => {
 
   return (
     <View style={styles.container}>
+      
       <FormularioProductos
        nuevoProducto={nuevoProducto}
        manejoCambio={manejoCambio}
@@ -121,6 +122,7 @@ const Productos = () => {
         editarProducto={editarProducto}
         eliminarProducto={eliminarProducto}
       />
+      <Button title="Cerrar Sesión" onPress={cerrarSesion} />
     </View>
   );
 };
