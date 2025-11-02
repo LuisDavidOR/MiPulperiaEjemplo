@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Button } from 'react-native';
 import { db } from '../database/firebaseconfig.js';
-import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc, orderBy, limit, query, where } from 'firebase/firestore';
 import ListaProductos from '../components/ListaProductos.js';
 import FormularioProductos from '../components/FormularioProductos';
 import TablaProductos from '../components/TablaProductos.js';
@@ -29,6 +29,163 @@ const Productos = ( {cerrarSesion} ) => {
       console.error("Error al obtener documentos:", error);
     }
   };
+
+  const pruebaConsulta1 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where("pais", "==", "Guatemala"),
+        orderBy("poblacion", "desc"),
+        limit(2)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 1 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    }
+    catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta2 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where ("pais", "==", "Honduras"),
+        where ("poblacion", ">", 700),
+        orderBy ("nombre", "asc"),
+        limit(3)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 2 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta3 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where ("pais", "==", "El Salvador"),
+        orderBy ("poblacion", "asc"),
+        limit(2)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 3 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta4 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where ("poblacion", "<=", 300),
+        orderBy("poblacion", "asc"),
+        orderBy ("pais", "desc"),
+        limit(4)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 4 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta5 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where ("poblacion", ">", 900),
+        orderBy("poblacion", "asc"),
+        orderBy ("nombre", "asc"),
+        limit(3)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 5 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta6 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where("pais", "==", "Guatemala"),
+        orderBy ("poblacion", "desc"),
+        limit(5)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 6 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta7 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        where("poblacion", ">=", 200),
+        where("poblacion", "<=", 600),
+        orderBy ("pais", "asc"),
+        limit(5)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 7 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
+
+  const pruebaConsulta8 = async () => {
+    try {
+      const q = query(
+        collection(db, "Ciudades"),
+        orderBy ("region", "desc"),
+        orderBy("poblacion", "desc"),
+        limit(5)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log("---------- Consulta 8 ----------");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(`ID: ${doc.id}, País: ${data.pais}, Nombre: ${data.nombre}, poblacion: ${data.poblacion}k`)
+      });
+    } catch (error) {
+      console.error("Error al hacer la consulta:", error);
+    }
+  }
 
   const eliminarProducto = async (id) => {
     try{
@@ -104,6 +261,14 @@ const Productos = ( {cerrarSesion} ) => {
 
   useEffect(() => {
     cargarDatos();
+    pruebaConsulta1();
+    pruebaConsulta2();
+    pruebaConsulta3();
+    pruebaConsulta4();
+    pruebaConsulta5();
+    pruebaConsulta6();
+    pruebaConsulta7();
+    pruebaConsulta8();
   }, []);
 
   return (
