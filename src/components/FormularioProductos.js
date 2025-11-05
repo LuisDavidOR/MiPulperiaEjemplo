@@ -9,8 +9,6 @@ const FormularioProductos = ({
   actualizarProducto,
   modoEdicion
 }) => {
-  
-
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>

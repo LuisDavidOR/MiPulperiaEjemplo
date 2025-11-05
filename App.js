@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { View, FlatList } from 'react-native';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './src/database/firebaseconfig';
-import Productos from "./src/views/Productos";
+
+import Productos from './src/views/Productos';
 import Clientes from './src/views/Clientes';
-import Promedio from './src/views/Promedio';
-import { FlatList, View } from 'react-native';
-import SumaNumeros from './src/views/SumaNumeros';
 import Usuarios from './src/views/Usuarios';
+import Promedio from './src/views/Promedio';
+import SumaNumeros from './src/views/SumaNumeros';
 import Login from './src/components/Login';
 
 const App = () => {
-  const data = [
-    { key: 'productos', component: <Productos cerrarSesion={cerrarSesion} /> },
-    { key: 'clientes', component: <Clientes cerrarSesion={cerrarSesion} /> },
-    { key: 'usuarios', component: <Usuarios cerrarSesion={cerrarSesion} /> },
-    { key: 'promedio', component: <Promedio cerrarSesion={cerrarSesion} /> },
-    { key: 'sumaNumeros', component: <SumaNumeros cerrarSesion={cerrarSesion} /> }
-  ];
-
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    //Escucha los cambios en la autenticación (login/logout)
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUsuario(user);
     });
@@ -33,14 +25,26 @@ const App = () => {
   };
 
   if (!usuario) {
-    //Si no hay usuario autenticado, mostrar login
     return <Login onLoginSuccess={() => setUsuario(auth.currentUser)} />;
   }
 
-  //Si hay usuario autenticado, mostrar productos
+  // Lista de vistas
+  const data = [
+    { key: 'productos', component: <Productos cerrarSesion={cerrarSesion} /> },
+    { key: 'clientes', component: <Clientes /> },
+    { key: 'usuarios', component: <Usuarios /> },
+    { key: 'promedio', component: <Promedio /> },
+    { key: 'sumaNumeros', component: <SumaNumeros /> },
+  ];
+
   return (
     <View style={{ flex: 1 }}>
-      <Productos cerrarSesion={cerrarSesion} />
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => item.component}
+        contentContainerStyle={{ paddingBottom: 50 }}
+      />
     </View>
   );
 };
