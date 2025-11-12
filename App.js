@@ -10,6 +10,7 @@ import Promedio from './src/views/Promedio';
 import SumaNumeros from './src/views/SumaNumeros';
 import Login from './src/components/Login';
 import ProductosRealtime from './src/views/ProductosRealtime';
+import CalculoIMC from './src/views/CalculoIMC';
 
 const App = () => {
   const [usuario, setUsuario] = useState(null);
@@ -37,6 +38,7 @@ const App = () => {
     { key: 'promedio', component: <Promedio /> },
     { key: 'sumaNumeros', component: <SumaNumeros /> },
     { key: 'ProductosRealtime', component: <ProductosRealtime /> },
+    { key: 'CalculoIMC', component: <CalculoIMC /> },
   ];
 
   return (
